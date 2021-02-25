@@ -5,7 +5,7 @@
 schoolwater29967.doorspeed cappres1 87ca33c9-d11d-3de3-8a76-2361178dd572
  */
 metadata {
-	definition (name: "testSwitchLevelCap",namespace:"nayelyz", author:"nayely",vid: "59110d01-5da7-31be-9909-3825393b1907", mnmn: "SmartThingsCommunity") {
+	definition (name: "testswitchlevelcap",namespace:"nayelyz", author:"nayely",vid: "59110d01-5da7-31be-9909-3825393b1907", mnmn: "SmartThingsCommunity") {
         capability "switch level"
 	}
 
