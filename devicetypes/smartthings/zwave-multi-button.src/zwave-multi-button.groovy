@@ -32,6 +32,8 @@ metadata {
 		fingerprint mfr: "0086", prod: "0101", model: "0058", deviceJoinName: "Aeotec Remote Control", mnmn: "SmartThings", vid: "generic-4-button" //US //Aeotec KeyFob
 		fingerprint mfr: "0086", prod: "0001", model: "0058", deviceJoinName: "Aeotec Remote Control", mnmn: "SmartThings", vid: "generic-4-button" //EU //Aeotec KeyFob
 		fingerprint mfr: "010F", prod: "1001", model: "3000", deviceJoinName: "Fibaro Remote Control", mnmn: "SmartThings", vid: "generic-6-button" //AU //Fibaro KeyFob
+		// ZRC-90 is an 8-button device, but there appears to be no suitable profile, hence using generic-6-button and ignoring 2 buttons for now.
+		fingerprint mfr: "5254", prod: "0000", model: "8510", deviceJoinName: "Remotec Remote Control", mnmn: "SmartThings", vid: "generic-6-button" //US //ZRC-90US
 	}
 
 	tiles(scale: 2) {
@@ -147,6 +149,10 @@ def zwaveEvent(physicalgraph.zwave.commands.centralscenev1.CentralSceneNotificat
 
 def sendEventToChild(buttonNumber, event) {
 	String childDni = "${device.deviceNetworkId}:$buttonNumber"
+	if (buttonNumber > prodNumberOfButtons[zwaveInfo.prod]) {
+		log.debug "Ignoring button $buttonNumber - button number too high"
+		return
+	}
 	def child = childDevices.find { it.deviceNetworkId == childDni }
 	child?.sendEvent(event)
 }
@@ -176,6 +182,10 @@ def zwaveEvent(physicalgraph.zwave.commands.batteryv1.BatteryReport cmd) {
 
 def zwaveEvent(physicalgraph.zwave.Command cmd) {
 	log.warn "Unhandled command: ${cmd}"
+}
+
+def ping() {
+    log.debug "Battery Device - Not sending ping commands"
 }
 
 private secure(cmd) {
@@ -214,18 +224,28 @@ private getEventsMap() {[
 ]}
 
 private getProdNumberOfButtons() {[
-		"1001" : 6,
+		/*"1001" : 6,
 		"0102" : 4,
 		"0002" : 4,
 		"0101" : 4,
-		"0001" : 4
+		"0001" : 4*/
+		"0102" : 4,
+		"0002" : 4,
+		"0101" : 4,
+		"0001" : 4,
+		"0000" : 6  // Really 8
 ]}
 
 private getSupportedButtonValues() {
 	def values = ["pushed", "held"]
 	if (isFibaro()) values += ["double", "down_hold", "pushed_3x"]
+	else if (isRemotec()) values += ["double", "down_hold"]
 	return values
 }
+
+private isRemotec() {
+    zwaveInfo.mfr?.contains("5254")
+} 	
 
 private isFibaro() {
 	zwaveInfo.mfr?.contains("010F")
