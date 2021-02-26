@@ -5,8 +5,9 @@
 schoolwater29967.doorspeed cappres1 87ca33c9-d11d-3de3-8a76-2361178dd572
  */
 metadata {
-    definition (name: "testswitchlevelcap",namespace:"nayelyz", author:"nayely",vid: "59110d01-5da7-31be-9909-3825393b1907", mnmn: "SmartThingsCommunity") {
-        capability "switch level"
+    definition (name: "panicbutton-child",namespace:"nayelyz", author:"nayely",vid: "", mnmn: "SmartThingsCommunity") {
+        capability "button"
+        //conditions - button
     }
 
     simulator {}
@@ -14,10 +15,6 @@ metadata {
     tiles {}
 }
 
-/*def setZoneSetpoint(Integer arg) {
-    log.trace "parse($description)"
-    sendEvent(name: "zoneSetpoint", value: "20")
-}*/
 
 def installed() {
     log.trace "Executing 'installed'"
@@ -29,12 +26,8 @@ def updated() {
     initialize()
 }
 
-def setLevel(arg){
-log.trace "${arg}"
-    sendEvent(name: "level", value: level)
-}
 
 private initialize() {
     log.trace "Executing 'initialize'"
-    sendEvent(name: "level", value: "10")
+    sendEvent(name: "button", value: "pushed")
 }
