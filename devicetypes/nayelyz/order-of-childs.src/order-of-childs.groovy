@@ -5,7 +5,7 @@
 schoolwater29967.doorspeed cappres1 87ca33c9-d11d-3de3-8a76-2361178dd572
  */
 metadata {
-    definition (name: "order-of-childs",namespace:"nayelyz", ocfDeviceType:"oic.d.smartlock", deviceTypeId: "SmartLock", author:"nayely",vid: "7c5f58d6-958b-3329-85d5-2371ea7ebc61", mnmn: "SmartThingsCommunity") {
+    definition (name: "order-of-childs",namespace:"nayelyz",mcdSync: true, ocfDeviceType:"oic.d.smartlock", deviceTypeId: "SmartLock", author:"nayely",vid: "7c5f58d6-958b-3329-85d5-2371ea7ebc61", mnmn: "SmartThingsCommunity") {
         capability "rboyapps.arming"//D
         capability "lock"//D
         capability "alarm"
@@ -46,4 +46,11 @@ private initialize() {
     sendEvent(name: "autolock", value: "disabled")
     sendEvent(name: "button", value: "pushed")
     sendEvent(name: "battery", value: "100")
+}
+
+def createChildDevices(){
+    def child1 = addChildDevice( 'policebutton-child', "policebutton-child-1", device.hubId,[ isComponent: true, completedSetup: true, label: "PoliceButton", componentName: "PoliceButton", componentLabel: "PoliceButton"])
+    def child2 = addChildDevice( 'firebutton-child', "firebutton-child-2", device.hubId,[ isComponent: true, completedSetup: true, label: "FireButton", componentName: "FireButton", componentLabel: "FireButton"])
+    def child3 = addChildDevice( 'panicbutton-child', "panicbutton-child-2", device.hubId,[ isComponent: true, completedSetup: true, label: "PanicButton", componentName: "PanicButton", componentLabel: "PanicButton"])
+    def child4 = addChildDevice( 'medicalbutton-child', "medicalbutton-child-2", device.hubId,[ isComponent: true, completedSetup: true, label: "MedicalButton", componentName: "MedicalButton", componentLabel: "MedicalButton"])
 }
